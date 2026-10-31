@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Nearby Places — Path to Plan{% endblock %}
+{% block content %}
+<section class="page-head"><span class="eyebrow">NEARBY PLACES</span><h1>Discover what's nearby</h1><p>Enter a location and choose a category to search OpenStreetMap data.</p></section>
+<section class="panel standalone">
+  <div class="search-row"><input id="nearbyLocation" placeholder="e.g. Kakinada, Andhra Pradesh"><button class="btn primary" onclick="nearbySearchLocation()">Search</button></div>
+  <div id="nearbyLocationResults" class="results"></div>
+  <div id="nearbyLocationSelected" class="selected"></div>
+  <div class="field-group"><label>Radius</label><div class="radius-row">{% for r in [1,2,5,10] %}<label><input type="radio" name="nearbyRadius" value="{{r}}" {% if r==5 %}checked{% endif %}> {{r}} km</label>{% endfor %}</div></div>
+  <div id="categoryButtons" class="category-buttons">
+    {% for key,label in [('hospitals','🏥 Hospitals'),('bus','🚌 Bus Stations'),('railway','🚆 Railway Stations'),('airports','✈️ Airports'),('seaports','⚓ Seaports'),('hotels','🏨 Hotels'),('restaurants','🍴 Restaurants')] %}
+    <button class="category-btn" onclick="loadNearby('{{key}}')">{{label}}</button>
+    {% endfor %}
+  </div>
+  <div id="nearbyMap"></div>
+  <div id="nearbyMessage" class="message"></div>
+  <div id="nearbyCards" class="place-grid"></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/nearby.js') }}"></script>{% endblock %}

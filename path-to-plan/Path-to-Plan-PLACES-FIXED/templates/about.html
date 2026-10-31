@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}About — Path to Plan{% endblock %}
+{% block content %}
+<section class="page-head"><span class="eyebrow">ABOUT THE PROJECT</span><h1>Path to Plan</h1><p>A full-stack travel planning assistant built with Flask, SQLite and open mapping services.</p></section>
+<section class="two-col">
+  <div class="panel"><h2>How it works</h2><ol class="steps"><li>Search a starting location.</li><li>Search and select a destination.</li><li>Calculate a route with OSRM.</li><li>Explore nearby places with OpenStreetMap/Overpass.</li><li>Save the journey in SQLite.</li></ol></div>
+  <div class="panel"><h2>Data accuracy</h2><p>Path to Plan does not invent names, ratings, prices, phone numbers or schedules. If mapped information is unavailable, the interface says so.</p><p class="notice">Nearby place information is provided for reference. Please verify availability and contact details before relying on it.</p></div>
+</section>
+{% endblock %}

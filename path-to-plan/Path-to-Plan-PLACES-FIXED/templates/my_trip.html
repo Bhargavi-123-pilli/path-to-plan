@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}My Travel Plan — Path to Plan{% endblock %}
+{% block content %}
+<section class="page-head"><span class="eyebrow">MY TRAVEL PLAN</span><h1>Complete travel plan</h1></section>
+{% if trip %}
+<section class="panel">
+  <div class="route-summary">
+    <div><small>STARTING POINT</small><strong>{{ trip.start_location }}</strong></div>
+    <div><small>DESTINATION</small><strong>{{ trip.destination }}</strong></div>
+    <div><small>DISTANCE</small><strong>{{ "%.2f"|format(trip.distance or 0) }} km</strong></div>
+    <div><small>ESTIMATED TIME</small><strong>{{ "%.0f"|format(trip.estimated_time or 0) }} minutes</strong></div>
+  </div>
+  <div id="savedMap"></div>
+  <div class="notice">Nearby-place data is live and can change. Please verify availability and contact details before relying on it.</div>
+  <div class="action-row"><button class="btn danger" onclick="deleteSavedTrip({{trip.id}})">Delete Trip</button></div>
+</section>
+{% else %}
+<section class="panel empty-state"><h2>No saved trip found</h2><p>Build a plan first and save it here.</p><a class="btn primary" href="/plan-trip">Start Planning</a></section>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+{% if trip %}<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const map = L.map("savedMap").setView([{{trip.start_latitude}}, {{trip.start_longitude}}], 8);
+  const tiles = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; OpenStreetMap contributors", maxZoom: 19
+  }).addTo(map);
+  tiles.on("tileerror", () => console.warn("OpenStreetMap tile failed to load."));
+  const start = [{{trip.start_latitude}}, {{trip.start_longitude}}];
+  const dest = [{{trip.destination_latitude}}, {{trip.destination_longitude}}];
+  L.marker(start).addTo(map).bindPopup("{{trip.start_location|e}}").openPopup();
+  L.marker(dest).addTo(map).bindPopup("{{trip.destination|e}}");
+  const savedGeometry = {{ trip.route_geometry|tojson }};
+  const routeLayer = savedGeometry
+    ? L.geoJSON(savedGeometry, {style:{weight:5}}).addTo(map)
+    : L.polyline([start, dest], {weight:5, dashArray:"6 8"}).addTo(map);
+  map.fitBounds(routeLayer.getBounds(), {padding:[30,30]});
+  setTimeout(() => map.invalidateSize(), 250);
+});
+async function deleteSavedTrip(id) {
+  if (!confirm("Delete this travel plan?")) return;
+  const r = await fetch("/delete-trip?id="+id, {method:"DELETE"});
+  const d = await r.json();
+  if (d.success) location.href="/plan-trip";
+  else alert(d.error || "Could not delete trip.");
+}
+</script>{% endif %}
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Plan Your Trip — Path to Plan{% endblock %}
+{% block content %}
+<section class="page-head">
+  <span class="eyebrow">TRIP PLANNER</span>
+  <h1>Build your travel plan</h1>
+  <p>Choose your starting point and destination, then explore your route and nearby places.</p>
+</section>
+<div class="planner-layout">
+  <section class="panel">
+    <div class="field-group">
+      <label>Where are you starting from?</label>
+      <div class="search-row"><input id="startSearch" placeholder="Search your location..."><button class="btn primary" onclick="searchPlace('start')">Search</button></div>
+      <button class="link-btn" onclick="useCurrentLocation()">◎ Use My Current Location</button>
+      <div id="startResults" class="results"></div>
+      <div id="startSelected" class="selected"></div>
+    </div>
+
+    <div class="field-group">
+      <label>Where do you want to go?</label>
+      <div class="search-row"><input id="destSearch" placeholder="Search destination..."><button class="btn primary" onclick="searchPlace('dest')">Search</button></div>
+      <div id="destResults" class="results"></div>
+      <div id="destSelected" class="selected"></div>
+    </div>
+
+    <div class="field-group">
+      <label>Travel mode</label>
+      <div class="mode-row">
+        <button class="mode active" data-mode="driving">🚗 Driving</button>
+        <button class="mode" data-mode="walking" title="Requires a separate foot-routing provider">🚶 Walking*</button>
+        <button class="mode" data-mode="cycling" title="Requires a separate bicycle-routing provider">🚲 Cycling*</button>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Nearby search radius</label>
+      <div class="radius-row">
+        {% for r in [1,2,5,10] %}<label><input type="radio" name="radius" value="{{r}}" {% if r==5 %}checked{% endif %}> {{r}} km</label>{% endfor %}
+      </div>
+    </div>
+
+    <button id="directionsBtn" class="btn primary wide" onclick="calculatePlan()">GET DIRECTIONS</button>
+    <div id="plannerMessage" class="message"></div>
+  </section>
+
+  <section class="map-panel"><div id="map"></div></section>
+</div>
+
+<section id="planResults" class="section hidden">
+  <div class="route-summary">
+    <div><small>FROM</small><strong id="fromName">—</strong></div>
+    <div><small>TO</small><strong id="toName">—</strong></div>
+    <div><small>DISTANCE</small><strong id="distance">—</strong></div>
+    <div><small>ESTIMATED TIME</small><strong id="duration">—</strong></div>
+  </div>
+  <div class="section-heading compact"><span class="eyebrow">NEARBY DISCOVERY</span><h2>Explore both sides of your journey</h2></div>
+  <div class="location-columns">
+    <div class="nearby-box"><h3>📍 Nearby Places at Starting Location</h3><div id="startNearby"></div></div>
+    <div class="nearby-box"><h3>📍 Nearby Places at Destination</h3><div id="destNearby"></div></div>
+  </div>
+  <div class="action-row"><button class="btn secondary" onclick="saveTrip()">Save My Travel Plan</button><a id="viewTripLink" class="btn primary hidden" href="#">View Complete Plan</a></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/plan.js') }}"></script>{% endblock %}

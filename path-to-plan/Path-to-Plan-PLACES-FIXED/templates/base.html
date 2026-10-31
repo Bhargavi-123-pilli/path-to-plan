@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Path to Plan{% endblock %}</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="/">PATH <span>TO PLAN</span></a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/plan-trip">Plan Trip</a>
+    <a href="/nearby">Nearby</a>
+    <a href="/about">About</a>
+  </nav>
+</header>
+<main>{% block content %}{% endblock %}</main>
+<footer>Path to Plan · OpenStreetMap-powered travel planning assistant</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

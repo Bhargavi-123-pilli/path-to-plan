@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Path to Plan — Smart Travel Planning{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">SMART TRAVEL PLANNING</span>
+    <h1>Plan Your Journey.<br><span>Find Your Route.</span><br>Discover Everything Nearby.</h1>
+    <p>Search locations, calculate routes, and discover hospitals, transport, hotels and restaurants around your journey.</p>
+    <a class="btn primary" href="/plan-trip">Start Planning →</a>
+  </div>
+  <div class="hero-map-card">
+    <div class="map-art">
+      <div class="route-dot a"></div><div class="route-dot b"></div>
+      <div class="route-line"></div><div class="map-label">YOUR JOURNEY</div>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="section-heading"><span class="eyebrow">ALL IN ONE PLACE</span><h2>Travel information that matters</h2></div>
+  <div class="feature-grid">
+    {% for icon,name in [('🏥','Healthcare'),('🚌','Bus Stations'),('🚆','Railway Stations'),('✈️','Airports'),('⚓','Seaports'),('🏨','Hotels'),('🍴','Restaurants'),('🗺️','Route Planning')] %}
+    <div class="feature-card"><div class="feature-icon">{{ icon }}</div><h3>{{ name }}</h3><p>Find real map data near your selected location.</p></div>
+    {% endfor %}
+  </div>
+</section>
+<section class="notice">Data is retrieved dynamically from OpenStreetMap services. Availability and contact details depend on mapped data.</section>
+{% endblock %}
